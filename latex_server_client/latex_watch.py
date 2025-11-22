@@ -11,10 +11,11 @@ Supports .latexignore files using gitignore syntax.
 import argparse
 import logging
 import os
+import base64
 import sys
 import time
 from pathlib import Path
-from typing import Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set
 
 import requests
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
@@ -175,16 +176,15 @@ class LatexWatcher(FileSystemEventHandler):
 
         return False
 
-    def _collect_files(self) -> Dict[str, str]:
+    def _collect_files(self) -> Dict[str, Any]:
         """
         Collect all files in the directory that should be sent.
-
-        Returns:
-            Dictionary mapping relative paths to file contents
+        Returns a dictionary mapping paths to file contents.
+        Supports both text and binary files (binary as base64).
         """
         files = {}
 
-        # Read main file
+        # Read main file (always text)
         try:
             with open(self.main_file, "r", encoding="utf-8") as f:
                 files["main"] = f.read()
@@ -201,29 +201,47 @@ class LatexWatcher(FileSystemEventHandler):
             if not file_path.is_file():
                 continue
 
-            # Skip the main file (already added)
+            # Skip the main file
             if file_path == self.main_file:
                 continue
 
-            # Check if should be ignored
+            # Check ignore patterns
             if self._should_ignore_path(file_path):
                 continue
 
-            try:
-                # Get relative path
-                rel_path = file_path.relative_to(self.root_dir)
+            rel_path = file_path.relative_to(self.root_dir)
 
-                # Try to read as text
+            # Try to read as UTF-8
+            try:
                 with open(file_path, "r", encoding="utf-8") as f:
-                    content = f.read()
-                    files["files"][str(rel_path)] = content
-                    logger.debug(f"Added file: {rel_path}")
+                    files["files"][str(rel_path)] = {
+                        "data": f.read(),
+                        "binary": False
+                    }
+                    logger.debug(f"Added text file: {rel_path}")
+                continue
 
             except UnicodeDecodeError:
-                # Skip binary files
-                logger.debug(f"Skipped binary file: {file_path}")
+                # Binary file → read raw and encode
+                try:
+                    with open(file_path, "rb") as f:
+                        raw = f.read()
+                        b64 = base64.b64encode(raw).decode("ascii")
+
+                        files["files"][str(rel_path)] = {
+                            "data": b64,
+                            "binary": True
+                        }
+
+                        logger.debug(f"Added binary file: {rel_path}")
+
+                except Exception as e:
+                    logger.warning(f"Error reading binary {file_path}: {e}")
+                    continue
+
             except Exception as e:
                 logger.warning(f"Error reading {file_path}: {e}")
+                continue
 
         return files
 

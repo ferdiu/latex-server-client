@@ -1,5 +1,5 @@
 Name:           latex-server-client
-Version:        1.0.1
+Version:        2.0.0
 Release:        1%{?dist}
 Summary:        A watchdog client for latex-server
 
@@ -95,5 +95,8 @@ Summary: %{summary}
 
 
 %changelog
+* Sat Nov 22 2025 Federico Manzella <ferdiu.manzella@gmail.com> - 2.0.0-1
+- Update protocol to support binary files
+
 * Sat Nov 22 2025 Federico Manzella <ferdiu.manzella@gmail.com> - 1.0.1-1
 - First release
