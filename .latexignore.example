@@ -1,0 +1,80 @@
+# .latexignore - Exclude files from LaTeX compilation
+# This file uses the same syntax as .gitignore
+
+# LaTeX auxiliary files (already ignored by default, but shown for reference)
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+
+# Build directories
+build/
+dist/
+output/
+
+# Temporary and backup files
+*~
+*.swp
+*.swo
+*.tmp
+*.bak
+
+# Draft and note files
+drafts/
+notes/
+*-draft.tex
+*-notes.tex
+
+# Old versions
+old/
+archive/
+*-old.tex
+
+# Personal files
+TODO.txt
+NOTES.txt
+
+# Images source files (keep compiled versions)
+*.xcf
+*.psd
+*.ai
+*.svg
+
+# Generated files
+auto/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Version control
+.git/
+.svn/
+.hg/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-*
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Examples of negation (include specific files that would otherwise be ignored)
+# !important-draft.tex
+
+# Examples of directory-specific patterns
+# chapters/old-*.tex
+# appendix/*.tex
+
+# Example of glob patterns
+# **/*-backup.tex
