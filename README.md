@@ -2,6 +2,8 @@
 
 The `latex-watch` command monitors your LaTeX project directory and automatically compiles your document whenever files change. This provides a live-preview workflow where you can edit your LaTeX files and immediately see the updated PDF.
 
+This is intended to be a client for my [latex-server](https://github.com/ferdiu/latex-server).
+
 ## Features
 
 - **BibTeX Support**: Automatically runs BibTeX when citations are detected
@@ -475,6 +477,6 @@ Add to your `.emacs` or `init.el`:
 
 ## See Also
 
-- Main README: [README.md](README.md)
-- Server documentation: [SETUP.md](SETUP.md)
+- Server README: [README.md](https://github.com/ferdiu/latex-server/blob/main/README.md)
+- Server documentation: [SETUP.md](https://github.com/ferdiu/latex-server/blob/main/SETUP.md)
 - API documentation: http://localhost:9080/docs (when server is running)
